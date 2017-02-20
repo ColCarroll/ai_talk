@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <title>Introduction to Machine Learning</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/scores.js"></script>
+    <script type="text/javascript" src="js/logit.js"></script>
+    <script type="text/javascript" src="js/residuals.js"></script>
+    <script type="text/javascript" src="js/overfitting_one.js"></script>
+    <script type="text/javascript" src="js/overfitting_two.js"></script>
+    <script type="text/javascript" src="js/sigmoid.js"></script>
+    <script type="text/javascript" src="js/oring.js"></script>
+    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.js"></script>
+    ........
+    <!-- General and theme style sheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/theme/simple.css" id="theme">
+    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.4.min.css" type="text/css" />
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+        if (window.location.search.match(/print-pdf/gi)) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/print/pdf.css';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+    </script>
+
+    <!-- Get Font-awesome from cdn -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
+    <!-- Custom stylesheet, it must be in the same directory as the html file -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_one.css">
+    <link rel="stylesheet" href="style_two.css">
+    <link rel="stylesheet" href="style_three.css">
+    <link rel="stylesheet" href="custom.css">
+
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>Machine Learning</h1>
+                <h5>and</h5>
+                <h1>Probabilistic Programming</h1>
+                <p>
+                    <tiny>Colin Carroll, Kensho</tiny>
+            </section>
+
+            <section data-background-image='img/k_splash_video.jpg'>
+                <h1 class="dark-background">Kensho</h1>
+                <h2 class="dark-background">Technology that brings transparency to complex systems</h2>
+            </section>
+
+            <section>
+                <h3>Motivating example from</h3>
+                <img data-src="img/kaggle.png">
+            </section>
+
+            <section>
+                <h1 id="Raw-Data">Raw Data<a class="anchor-link" href="#Raw-Data">&#182;</a></h1>
+                <div class="cell border-box-sizing code_cell rendered">
+                    <div class="input">
+                        <div class="inner_cell">
+                            <div class="input_area">
+                                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_df</span><span class="p">(</span><span class="mi">2016</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></pre></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output_wrapper">
+                        <div class="output">
+                            <div class="output_area">
+                                <div class="output_html rendered_html output_subarea output_execute_result">
+                                    <div>
+                                        <table border="1" class="dataframe">
+                                            <thead>
+                                                <tr style="text-align: right;">
+                                                    <th></th>
+                                                    <th>ast</th>
+                                                    <th>blk</th>
+                                                    <th>day_num</th>
+                                                    <th>dr</th>
+                                                    <th>fga</th>
+                                                    <th>fga3</th>
+                                                    <th>fgm</th>
+                                                    <th>fgm3</th>
+                                                    <th>fta</th>
+                                                    <th>ftm</th>
+                                                    <th>...</th>
+                                                    <th>num_ot</th>
+                                                    <th>or</th>
+                                                    <th>pf</th>
+                                                    <th>score</th>
+                                                    <th>season</th>
+                                                    <th>stl</th>
+                                                    <th>team</th>
+                                                    <th>team_name</th>
+                                                    <th>to</th>
+                                                    <th>won</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>0</th>
+                                                    <td>13</td>
+                                                    <td>6</td>
+                                                    <td>11</td>
+                                                    <td>28</td>
+                                                    <td>57</td>
+                                                    <td>17</td>
+                                                    <td>29</td>
+                                                    <td>4</td>
+                                                    <td>27</td>
+                                                    <td>15</td>
+                                                    <td>...</td>
+                                                    <td>0</td>
+                                                    <td>10</td>
+                                                    <td>21</td>
+                                                    <td>77</td>
+                                                    <td>2016</td>
+                                                    <td>11</td>
+                                                    <td>1104</td>
+                                                    <td>Alabama</td>
+                                                    <td>12</td>
+                                                    <td>True</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>1</th>
+                                                    <td>6</td>
+                                                    <td>4</td>
+                                                    <td>11</td>
+                                                    <td>27</td>
+                                                    <td>55</td>
+                                                    <td>19</td>
+                                                    <td>19</td>
+                                                    <td>7</td>
+                                                    <td>26</td>
+                                                    <td>19</td>
+                                                    <td>...</td>
+                                                    <td>0</td>
+                                                    <td>12</td>
+                                                    <td>25</td>
+                                                    <td>64</td>
+                                                    <td>2016</td>
+                                                    <td>7</td>
+                                                    <td>1244</td>
+                                                    <td>Kennesaw</td>
+                                                    <td>16</td>
+                                                    <td>False</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>2</th>
+                                                    <td>10</td>
+                                                    <td>1</td>
+                                                    <td>11</td>
+                                                    <td>23</td>
+                                                    <td>64</td>
+                                                    <td>29</td>
+                                                    <td>25</td>
+                                                    <td>8</td>
+                                                    <td>17</td>
+                                                    <td>10</td>
+                                                    <td>...</td>
+                                                    <td>1</td>
+                                                    <td>14</td>
+                                                    <td>25</td>
+                                                    <td>68</td>
+                                                    <td>2016</td>
+                                                    <td>12</td>
+                                                    <td>1105</td>
+                                                    <td>Alabama A&amp;M</td>
+                                                    <td>15</td>
+                                                    <td>True</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>3</th>
+                                                    <td>11</td>
+                                                    <td>7</td>
+                                                    <td>11</td>
+                                                    <td>30</td>
+                                                    <td>57</td>
+                                                    <td>27</td>
+                                                    <td>22</td>
+                                                    <td>7</td>
+                                                    <td>26</td>
+                                                    <td>16</td>
+                                                    <td>...</td>
+                                                    <td>1</td>
+                                                    <td>18</td>
+                                                    <td>21</td>
+                                                    <td>67</td>
+                                                    <td>2016</td>
+                                                    <td>6</td>
+                                                    <td>1408</td>
+                                                    <td>Tulane</td>
+                                                    <td>19</td>
+                                                    <td>False</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>4</th>
+                                                    <td>12</td>
+                                                    <td>6</td>
+                                                    <td>11</td>
+                                                    <td>34</td>
+                                                    <td>61</td>
+                                                    <td>20</td>
+                                                    <td>24</td>
+                                                    <td>6</td>
+                                                    <td>32</td>
+                                                    <td>25</td>
+                                                    <td>...</td>
+                                                    <td>0</td>
+                                                    <td>17</td>
+                                                    <td>21</td>
+                                                    <td>79</td>
+                                                    <td>2016</td>
+                                                    <td>4</td>
+                                                    <td>1112</td>
+                                                    <td>Arizona</td>
+                                                    <td>14</td>
+                                                    <td>True</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p>5 rows × 22 columns</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h1 id="Model">Model<a class="anchor-link" href="#Model">&#182;</a></h1>
+                <div class="cell border-box-sizing code_cell rendered">
+                    <div class="input">
+                        <div class="inner_cell">
+                            <div class="input_area">
+                                <div class=" highlight hl-ipython3">
+                                    <pre><span></span><span class="n">predict</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output_wrapper">
+                        <div class="output">
+                            <div class="output_area">
+                                <div class="prompt"></div>
+
+                                <div class="output_subarea output_stream output_stdout output_text">
+                                    <pre>North Carolina has a 80% chance of beating Connecticut
+Predicted Score:
+	North Carolina 75 Connecticut 66
+</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h1 id="What-is-going-on-here?">What is going on here?<a class="anchor-link" href="#What-is-going-on-here?">&#182;</a></h1>
+
+                <h3>Two models:</h3>
+
+                <div class="fragment">
+                    <p><strong>Regression</strong>
+                        <div class="input">
+                            <div class="inner_cell">
+                                <div class="input_area">
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_scores</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="output_wrapper">
+                            <div class="output">
+                                <div class="output_area">
+                                    <div class="output_text output_subarea output_execute_result">
+                                        <pre>&#39;North Carolina 75 Connecticut 66&#39;</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="fragment">
+                    <p><strong>Classification</strong>
+                        <div class="input">
+                            <div class="inner_cell">
+                                <div class="input_area">
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_winner</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="output_wrapper">
+                            <div class="output">
+                                <div class="output_area">
+                                    <div class="output_text output_subarea output_execute_result">
+                                        <pre>&#39;North Carolina has a 80% chance of beating Connecticut&#39;</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+            </section>
+
+            <section>
+                <h1>Model Building</h1>
+                <img src='img/robot_apocalypse_end.png'></img>
+                <tiny><a href="https://what-if.xkcd.com/5/">what-if.xkcd.com/5</a></tiny>
+                <ul>
+                    <li>
+                        <h3>Transform raw data to features</h3></li>
+                    <li>
+                        <h3>Train a model</h3></li>
+                    <li>
+                        <h3>Measure how accurate you expect the model to be</h3></li>
+                </ul>
+            </section>
+
+            <section>
+                <h1 id="Turning-raw-data-into-features">Turning raw data into features<a class="anchor-link" href="#Turning-raw-data-into-features">&#182;</a></h1>
+                <p>Surprisingly hard not to peek at the future.</p>
+                <div class="cell border-box-sizing code_cell rendered">
+                    <div class="input">
+                        <div class="inner_cell">
+                            <div class="input_area">
+                                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_features</span><span class="p">(</span><span class="n">get_training_data</span><span class="p">(</span><span class="n">results_2016</span><span class="p">))</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> </pre></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output_wrapper">
+                        <div class="output">
+                            <div class="output_area">
+                                <div class="output_html rendered_html output_subarea output_execute_result">
+                                    <div>
+                                        <table border="1" class="dataframe">
+                                            <thead>
+                                                <tr style="text-align: right;">
+                                                    <th></th>
+                                                    <th>avg_score_first</th>
+                                                    <th>avg_score_second</th>
+                                                    <th>avg_or_first</th>
+                                                    <th>avg_or_second</th>
+                                                    <th>avg_dr_first</th>
+                                                    <th>avg_dr_second</th>
+                                                    <th>avg_to_first</th>
+                                                    <th>avg_to_second</th>
+                                                    <th>avg_stl_first</th>
+                                                    <th>avg_stl_second</th>
+                                                    <th>home_game_first</th>
+                                                    <th>home_game_second</th>
+                                                    <th>logit_fg_pct_first</th>
+                                                    <th>logit_fg_pct_second</th>
+                                                    <th>logit_fg3_pct_first</th>
+                                                    <th>logit_fg3_pct_second</th>
+                                                    <th>logit_ft_pct_first</th>
+                                                    <th>logit_ft_pct_second</th>
+                                                    <th>logit_avg_won_first</th>
+                                                    <th>logit_avg_won_second</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>0</th>
+                                                    <td>69.9</td>
+                                                    <td>77.1</td>
+                                                    <td>11.1</td>
+                                                    <td>11.0</td>
+                                                    <td>25.9</td>
+                                                    <td>28.0</td>
+                                                    <td>13.9</td>
+                                                    <td>11.7</td>
+                                                    <td>7.8</td>
+                                                    <td>5.7</td>
+                                                    <td>False</td>
+                                                    <td>True</td>
+                                                    <td>-0.3</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.8</td>
+                                                    <td>-0.7</td>
+                                                    <td>0.7</td>
+                                                    <td>1.2</td>
+                                                    <td>-0.5</td>
+                                                    <td>2.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>1</th>
+                                                    <td>63.0</td>
+                                                    <td>77.3</td>
+                                                    <td>11.5</td>
+                                                    <td>13.6</td>
+                                                    <td>24.5</td>
+                                                    <td>26.6</td>
+                                                    <td>15.1</td>
+                                                    <td>16.1</td>
+                                                    <td>5.5</td>
+                                                    <td>6.3</td>
+                                                    <td>True</td>
+                                                    <td>False</td>
+                                                    <td>-0.4</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.9</td>
+                                                    <td>-0.6</td>
+                                                    <td>0.7</td>
+                                                    <td>0.9</td>
+                                                    <td>-1.1</td>
+                                                    <td>0.6</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>2</th>
+                                                    <td>70.3</td>
+                                                    <td>72.8</td>
+                                                    <td>5.8</td>
+                                                    <td>10.0</td>
+                                                    <td>24.9</td>
+                                                    <td>24.8</td>
+                                                    <td>11.5</td>
+                                                    <td>12.2</td>
+                                                    <td>4.0</td>
+                                                    <td>5.6</td>
+                                                    <td>False</td>
+                                                    <td>False</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.5</td>
+                                                    <td>-0.5</td>
+                                                    <td>0.9</td>
+                                                    <td>0.8</td>
+                                                    <td>-0.3</td>
+                                                    <td>-0.1</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>3</th>
+                                                    <td>78.3</td>
+                                                    <td>70.3</td>
+                                                    <td>13.6</td>
+                                                    <td>11.0</td>
+                                                    <td>25.0</td>
+                                                    <td>27.9</td>
+                                                    <td>10.9</td>
+                                                    <td>14.3</td>
+                                                    <td>6.1</td>
+                                                    <td>4.7</td>
+                                                    <td>False</td>
+                                                    <td>True</td>
+                                                    <td>-0.1</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.7</td>
+                                                    <td>-0.7</td>
+                                                    <td>0.9</td>
+                                                    <td>0.8</td>
+                                                    <td>0.9</td>
+                                                    <td>-0.2</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>4</th>
+                                                    <td>70.2</td>
+                                                    <td>78.6</td>
+                                                    <td>11.4</td>
+                                                    <td>10.8</td>
+                                                    <td>23.2</td>
+                                                    <td>22.6</td>
+                                                    <td>11.2</td>
+                                                    <td>12.4</td>
+                                                    <td>5.8</td>
+                                                    <td>4.6</td>
+                                                    <td>True</td>
+                                                    <td>False</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.2</td>
+                                                    <td>-0.8</td>
+                                                    <td>-0.5</td>
+                                                    <td>0.8</td>
+                                                    <td>1.3</td>
+                                                    <td>0.4</td>
+                                                    <td>-1.4</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section>
+                <h1 id="Nonlinear-models">Nonlinear models<a class="anchor-link" href="#Nonlinear-models">&#182;</a></h1>
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="8fbab149-aab7-4b6c-8169-34af10930274"></div>
+                </div>
+
+            </section>
+
+            <section>
+                <h1 id="Turning-features-into-a-model">Turning features into a model<a class="anchor-link" href="#Turning-features-into-a-model">&#182;</a></h1>
+                <p>When using linear regression we <em>assume</em> that $$ \mathbf{score} = w_1 \cdot \mathbf{avg\_score} + w_2 \cdot \mathbf{fg\_pct} + \cdots + w_m \cdot \mathbf{win\_pct} $$
+
+                    <p>Try to find $(w_1, w_2, \ldots, w_m)$.</p>
+            </section>
+
+            <section>
+                <blockquote class="twitter-tweet" data-lang="en">
+                    <p lang="en" dir="ltr">There&#39;s linear algebra, and then there&#39;s everything else we do to pay the bills so we can do more linear algebra.</p>&mdash; Tim Hopper 🔭 (@tdhopper) <a href="https://twitter.com/tdhopper/status/684380622639333376">January 5, 2016</a></blockquote>
+                <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </section>
+
+            <section>
+                <h2 id="More-concisely">More concisely<a class="anchor-link" href="#More-concisely">&#182;</a></h2>
+                <p>Try to find a $\mathbf{w}$ satisfying $\mathbf{y} = X\mathbf{w}$.</p>
+
+                <div class="fragment">
+                    <div class="cell border-box-sizing code_cell rendered">
+                        <div class="input">
+                            <div class="inner_cell">
+                                <div class="input_area">
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">explain_model</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span></pre></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="output_wrapper">
+                            <div class="output">
+                                <div class="output_area">
+                                    <div class="prompt"></div>
+                                    <div class="output_subarea output_stream output_stdout output_text">
+                                        <pre>predicted_score_first =
+	+0.51 * avg_score_first
+	+0.74 * avg_score_second
+	+0.24 * logit_fg_pct_first
+	-0.75 * logit_fg_pct_second
+	-0.03 * logit_fg3_pct_first
+	-0.80 * logit_fg3_pct_second
+	-0.32 * logit_ft_pct_first
+	+0.98 * logit_ft_pct_second
+	+0.20 * avg_or_first
+	-0.94 * avg_or_second
+	+2.93 * avg_dr_first
+	-1.21 * avg_dr_second
+	+4.13 * avg_to_first
+	-24.27 * avg_to_second
+	+0.03 * avg_stl_first
+	-1.31 * avg_stl_second
+	+0.13 * logit_avg_won_first
+	-4.15 * logit_avg_won_second
+	+0.08 * home_game_first
+	-0.24 * home_game_second
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h1 id="What-can-we-say-about-linear-regression?">What can we say about linear regression?<a class="anchor-link" href="#What-can-we-say-about-linear-regression?">&#182;</a></h1>
+            </section>
+
+            <section>
+                <h2 id="Linear-regression-minimizes-the-sum-of-squared-errors">Linear regression minimizes the sum of squared errors<a class="anchor-link" href="#Linear-regression-minimizes-the-sum-of-squared-errors">&#182;</a></h2> $$error(\mathbf{w}) = \sum_j (\mathbf{x}_j \cdot \mathbf{w} - y_j)^2$$
+            </section>
+
+            <section>
+                <h2 id="Linear-regression-finds-the-most-likely-weights">Linear regression finds the most likely weights<a class="anchor-link" href="#Linear-regression-finds-the-most-likely-weights">&#182;</a></h2>
+                <p>Given our data, $(X, \mathbf{y})$, <em>Bayes Rule</em> says that $$ P(\mathbf{w} | X, \mathbf{y}) = \frac{P(X, \mathbf{y} | \mathbf{w}) p(\mathbf{w})}{P(X, \mathbf{y})} $$
+            </section>
+
+            <section>
+                <h2 id="Linear-regression-is-geometrically-pleasant">Linear regression is geometrically pleasant<a class="anchor-link" href="#Linear-regression-is-geometrically-pleasant">&#182;</a></h2>
+                <h4 id="(and-syntactically-terrifying)">(and syntactically terrifying)<a class="anchor-link" href="#(and-syntactically-terrifying)">&#182;</a></h4>
+                <blockquote>
+                    <p>$X\mathbf{w}$ is the nearest point to $\mathbf{y}$ in the $m$-dimensional subspace of $\mathbb{R}^n$ spanned by the columns of $X$.</p>
+                </blockquote>
+                <img class="stretch" src="img/projections.png"></img>
+
+            </section>
+
+            <section>
+                <h2 id="More-guarantees*:">More guarantees<sup style="vertical-align: bottom">*</sup>:<a class="anchor-link" href="#More-guarantees*:">&#182;</a></h2>
+                <ul>
+                    <li>If there is no noise, the true $\mathbf{w}$ will be recovered</li>
+                    <li>$\mathbf{w}$ is unique</li>
+                    <li>$\mathbf{w}$ exists</li>
+                </ul>
+                <p>(*not actually guaranteed)</p>
+
+            </section>
+
+            <section>
+                <h2 id="Evaluating-Fit">Evaluating Fit<a class="anchor-link" href="#Evaluating-Fit">&#182;</a></h2>
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="e0422ea3-1110-4915-a76a-36c2c415912f"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2 id="How-wrong-will-I-be?">How wrong will I be?<a class="anchor-link" href="#How-wrong-will-I-be?">&#182;</a></h2>
+
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="04638bc4-fccc-4e4c-a37b-59771712530a"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2 id="Cross-validation,-testing,-overfitting...">Cross validation, testing, overfitting...<a class="anchor-link" href="#Cross-validation,-testing,-overfitting...">&#182;</a></h2>
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="00c1133c-4435-4805-8f03-d779caee9ade"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2 id="Cross-validation,-testing,-overfitting...">Cross validation, testing, overfitting...<a class="anchor-link" href="#Cross-validation,-testing,-overfitting...">&#182;</a></h2>
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="85533d43-cfe0-4cb8-ace2-6805afd95e9d"></div>
+                </div>
+            </section>
+
+            <section>
+                <h1 id="Logistic-regression,-briefly">Logistic regression, briefly<a class="anchor-link" href="#Logistic-regression,-briefly">&#182;</a></h1>
+                <div class="cell border-box-sizing code_cell rendered">
+                    <div class="input">
+                        <div class="inner_cell">
+                            <div class="input_area">
+                                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_winner</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output_wrapper">
+                        <div class="output">
+                            <div class="output_area">
+                                <div class="output_text output_subarea output_execute_result">
+                                    <pre>&#39;North Carolina has a 80% chance of beating Connecticut&#39;</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell border-box-sizing text_cell rendered">
+                    <div class="inner_cell">
+                        <div class="text_cell_render border-box-sizing rendered_html">
+                            <p>Instead of $$ \mathbf{y} = X\mathbf{w}, $$
+                            </p>
+                            $$ \mathbf{y} = \sigma \left(X\mathbf{w}\right) $$
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 id="What-is-$\sigma$?">What is $\sigma$?<a class="anchor-link" href="#What-is-$\sigma$?">&#182;</a></h2>
+                <div>
+                    <p>$$ \sigma(x) = \frac{1}{1 + e^{-x}} $$
+                </div>
+            </section>
+
+            <section>
+                <h2 id="What-is-$\sigma$?">What is $\sigma$?<a class="anchor-link" href="#What-is-$\sigma$?">&#182;</a></h2>
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="4ebf98af-1666-4864-b340-55a981fd8c63"></div>
+                </div>
+                .
+
+            </section>
+
+            <section>
+                <h1 id="Challenger-Disaster">Challenger Disaster<a class="anchor-link" href="#Challenger-Disaster">&#182;</a></h1>
+                <p><img src='img/oring.jpg'></img>
+            </section>
+
+            <section>
+                <h1 id="Challenger-dataset">Challenger dataset<a class="anchor-link" href="#Challenger-dataset">&#182;</a></h1>
+                <div class="bk-root">
+                    <div class="bk-plotdiv" id="d9ace0bc-df9e-468d-92b1-2579f8c4553f"></div>
+                </div>
+
+            </section>
+
+            <section>
+                <h1>Teaser: Probabilistic Programming</h1>
+                <img class="stretch" src="img/pymc3_logo.jpg"></img>
+            </section>
+
+            <section>
+                <h1>Probabilistic Programming</h1>
+                <table>
+                  <tr>
+                    <td><img src="img/stan_logo.png"></img></td>
+                    <td><img src="img/edward.png"></img></td>
+                  </tr>
+                </table>
+            </section>
+
+            <section>
+                <h1>Probabilistic Programming</h1>
+                <img class="stretch" src="img/fast_forward.png"></img>
+            </section>
+
+            <section>
+                <h2>Let's explicitly write down our model and data</h2> $$ \mathbf{y} = \mathbf{x} \cdot \text{weights} + \text{intercept} + Normal(0, \sigma) $$
+                <img class="stretch" src="img/pymc.png"></img>
+
+            </section>
+
+            <section>
+                $$ \mathbf{y} = \mathbf{x} \cdot \text{weights} + \text{intercept} + Normal(0, \sigma) $$
+
+                <img class="stretch" src="img/posterior.png"></img>
+
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        require({
+                // it makes sense to wait a little bit when you are loading
+                // reveal from a cdn in a slow connection environment
+                waitSeconds: 15
+            }, [
+                "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/head.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/js/reveal.js"
+            ],
+
+            function(head, Reveal) {
+
+                // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
+                Reveal.initialize({
+                    controls: true,
+                    progress: true,
+                    history: true,
+                    math: {
+                        mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+                        config: 'TeX-AMS_HTML-full' // See http://docs.mathjax.org/en/latest/config-files.html
+                    },
+                    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                    transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
+
+                    // Optional libraries used to extend on reveal.js
+                    dependencies: [{
+                            src: "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/classList.js",
+                            condition: function() {
+                                return !document.body.classList;
+                            }
+                        },
+                        {
+                            src: 'plugin/math/math.js',
+                            async: true
+                        },
+                        {
+                            src: "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/notes/notes.js",
+                            async: true,
+                            condition: function() {
+                                return !!document.body.classList;
+                            }
+                        }
+                    ]
+                });
+
+                var update_scroll = function(event) {
+                    $(".reveal").scrollTop(0);
+                };
+
+                Reveal.addEventListener('slidechanged', update_scroll);
+
+            }
+        );
+    </script>
+
+</body>
+
+
+</html>

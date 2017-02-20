@@ -1,0 +1,28 @@
+.reveal {
+    overflow: visible;
+}
+
+section .dark-background {
+    color: #ffffff;
+}
+
+h1.dark-background {
+    color: #ffffff;
+    text-align: center;
+}
+
+h2.dark-background {
+    color: #ffffff;
+    text-align: center;
+}
+
+html.bk-root {
+    width: 100%;
+    height: 100%;
+}
+
+body.bk-root {
+    width: 90%;
+    height: auto;
+    margin: 0;
+}
