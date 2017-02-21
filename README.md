@@ -15,14 +15,14 @@
 ## Running the code
 
 These slides started as an interactive Jupyter notebook, using the 
-[https://github.com/damianavila/RISE](RISE project).  See website for 
+[RISE project](https://github.com/damianavila/RISE).  See website for 
 installation.
 
 There is a `requirements.txt` in the `talk_code` folder -- all 
 code was written in python 3.6, but will probably work with 2.7, 3.4, 3.5.  
 
 Also required is data from 
-[https://www.kaggle.com/c/march-machine-learning-mania-2017](Kaggle) -- 
+[Kaggle](https://www.kaggle.com/c/march-machine-learning-mania-2017) -- 
 the scripts expect to see the two files 
   - RegularSeasonDetailedResults.csv
   - Teams.csv
