@@ -13,7 +13,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="js/scores.js"></script>
     <script type="text/javascript" src="js/logit.js"></script>
     <script type="text/javascript" src="js/residuals.js"></script>
     <script type="text/javascript" src="js/overfitting_one.js"></script>
@@ -58,6 +57,20 @@
                 <h1>Probabilistic Programming</h1>
                 <p>
                     <tiny>Colin Carroll, Kensho</tiny>
+                    <table>
+                        <tr>
+                            <td><i class="fa fa-bolt"></i></td>
+                            <td><a href="https://colindcarroll.com/">colindcarroll.com</a></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-github"></i></td>
+                            <td><a href="https://github.com/ColCarroll">ColCarroll</a></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fa fa-twitter"></i></td>
+                            <td><a href="https://twitter.com/colindcarroll">@colindcarroll</a></td>
+                        </tr>
+                    </table>
             </section>
 
             <section data-background-image='img/k_splash_video.jpg'>
@@ -252,7 +265,7 @@
                         <div class="inner_cell">
                             <div class="input_area">
                                 <div class=" highlight hl-ipython3">
-                                    <pre><span></span><span class="n">predict</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre>
+                                    <pre><span></span><span class="n">predict</span><span class="p">(</span><span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre>
                                 </div>
                             </div>
                         </div>
@@ -264,9 +277,9 @@
                                 <div class="prompt"></div>
 
                                 <div class="output_subarea output_stream output_stdout output_text">
-                                    <pre>North Carolina has a 80% chance of beating Connecticut
+                                    <pre>North Carolina has a 78% chance of beating Connecticut
 Predicted Score:
-	North Carolina 75 Connecticut 66
+	North Carolina 79 Connecticut 70
 </pre>
                                 </div>
                             </div>
@@ -285,7 +298,7 @@ Predicted Score:
                         <div class="input">
                             <div class="inner_cell">
                                 <div class="input_area">
-                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_scores</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_scores</span><span class="p">(</span><span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
                                 </div>
                             </div>
                         </div>
@@ -294,7 +307,7 @@ Predicted Score:
                             <div class="output">
                                 <div class="output_area">
                                     <div class="output_text output_subarea output_execute_result">
-                                        <pre>&#39;North Carolina 75 Connecticut 66&#39;</pre>
+                                        <pre>&#39;North Carolina 79 Connecticut 70&#39;</pre>
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +319,7 @@ Predicted Score:
                         <div class="input">
                             <div class="inner_cell">
                                 <div class="input_area">
-                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_winner</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_winner</span><span class="p">(</span><span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +329,7 @@ Predicted Score:
                             <div class="output">
                                 <div class="output_area">
                                     <div class="output_text output_subarea output_execute_result">
-                                        <pre>&#39;North Carolina has a 80% chance of beating Connecticut&#39;</pre>
+                                        <pre>&#39;North Carolina has a 78% chance of beating Connecticut&#39;</pre>
                                     </div>
                                 </div>
                             </div>
@@ -360,143 +373,71 @@ Predicted Score:
                                             <thead>
                                                 <tr style="text-align: right;">
                                                     <th></th>
-                                                    <th>avg_score_first</th>
-                                                    <th>avg_score_second</th>
-                                                    <th>avg_or_first</th>
-                                                    <th>avg_or_second</th>
-                                                    <th>avg_dr_first</th>
-                                                    <th>avg_dr_second</th>
-                                                    <th>avg_to_first</th>
-                                                    <th>avg_to_second</th>
-                                                    <th>avg_stl_first</th>
-                                                    <th>avg_stl_second</th>
-                                                    <th>home_game_first</th>
-                                                    <th>home_game_second</th>
-                                                    <th>logit_fg_pct_first</th>
-                                                    <th>logit_fg_pct_second</th>
-                                                    <th>logit_fg3_pct_first</th>
-                                                    <th>logit_fg3_pct_second</th>
-                                                    <th>logit_ft_pct_first</th>
-                                                    <th>logit_ft_pct_second</th>
-                                                    <th>logit_avg_won_first</th>
-                                                    <th>logit_avg_won_second</th>
+                                                    <th>avg_score_</th>
+                                                    <th>avg_score_opponent</th>
+                                                    <th>home_game_</th>
+                                                    <th>home_game_opponent</th>
+                                                    <th>transformed_fg_pct_</th>
+                                                    <th>transformed_fg_pct_opponent</th>
+                                                    <th>transformed_avg_won_</th>
+                                                    <th>transformed_avg_won_opponent</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <th>0</th>
-                                                    <td>69.9</td>
-                                                    <td>77.1</td>
-                                                    <td>11.1</td>
-                                                    <td>11.0</td>
-                                                    <td>25.9</td>
-                                                    <td>28.0</td>
-                                                    <td>13.9</td>
-                                                    <td>11.7</td>
-                                                    <td>7.8</td>
-                                                    <td>5.7</td>
-                                                    <td>False</td>
+                                                    <td>69.7</td>
+                                                    <td>73.4</td>
                                                     <td>True</td>
+                                                    <td>False</td>
                                                     <td>-0.3</td>
                                                     <td>-0.2</td>
-                                                    <td>-0.8</td>
-                                                    <td>-0.7</td>
-                                                    <td>0.7</td>
-                                                    <td>1.2</td>
-                                                    <td>-0.5</td>
-                                                    <td>2.1</td>
+                                                    <td>-1.3</td>
+                                                    <td>-1.5</td>
                                                 </tr>
                                                 <tr>
                                                     <th>1</th>
-                                                    <td>63.0</td>
-                                                    <td>77.3</td>
-                                                    <td>11.5</td>
-                                                    <td>13.6</td>
-                                                    <td>24.5</td>
-                                                    <td>26.6</td>
-                                                    <td>15.1</td>
-                                                    <td>16.1</td>
-                                                    <td>5.5</td>
-                                                    <td>6.3</td>
-                                                    <td>True</td>
+                                                    <td>69.4</td>
+                                                    <td>72.2</td>
                                                     <td>False</td>
+                                                    <td>True</td>
+                                                    <td>-0.3</td>
                                                     <td>-0.4</td>
-                                                    <td>-0.2</td>
-                                                    <td>-0.9</td>
-                                                    <td>-0.6</td>
-                                                    <td>0.7</td>
-                                                    <td>0.9</td>
-                                                    <td>-1.1</td>
-                                                    <td>0.6</td>
+                                                    <td>-1.9</td>
+                                                    <td>-0.7</td>
                                                 </tr>
                                                 <tr>
                                                     <th>2</th>
-                                                    <td>70.3</td>
-                                                    <td>72.8</td>
-                                                    <td>5.8</td>
-                                                    <td>10.0</td>
-                                                    <td>24.9</td>
-                                                    <td>24.8</td>
-                                                    <td>11.5</td>
-                                                    <td>12.2</td>
-                                                    <td>4.0</td>
-                                                    <td>5.6</td>
+                                                    <td>69.5</td>
+                                                    <td>74.6</td>
                                                     <td>False</td>
-                                                    <td>False</td>
+                                                    <td>True</td>
                                                     <td>-0.2</td>
                                                     <td>-0.2</td>
-                                                    <td>-0.5</td>
-                                                    <td>-0.5</td>
-                                                    <td>0.9</td>
-                                                    <td>0.8</td>
-                                                    <td>-0.3</td>
-                                                    <td>-0.1</td>
+                                                    <td>-0.7</td>
+                                                    <td>0.3</td>
                                                 </tr>
                                                 <tr>
                                                     <th>3</th>
-                                                    <td>78.3</td>
-                                                    <td>70.3</td>
-                                                    <td>13.6</td>
-                                                    <td>11.0</td>
-                                                    <td>25.0</td>
-                                                    <td>27.9</td>
-                                                    <td>10.9</td>
-                                                    <td>14.3</td>
-                                                    <td>6.1</td>
-                                                    <td>4.7</td>
-                                                    <td>False</td>
+                                                    <td>86.5</td>
+                                                    <td>67.2</td>
                                                     <td>True</td>
-                                                    <td>-0.1</td>
-                                                    <td>-0.2</td>
-                                                    <td>-0.7</td>
-                                                    <td>-0.7</td>
-                                                    <td>0.9</td>
-                                                    <td>0.8</td>
-                                                    <td>0.9</td>
-                                                    <td>-0.2</td>
+                                                    <td>False</td>
+                                                    <td>0.2</td>
+                                                    <td>-0.3</td>
+                                                    <td>0.5</td>
+                                                    <td>1.4</td>
                                                 </tr>
                                                 <tr>
                                                     <th>4</th>
-                                                    <td>70.2</td>
-                                                    <td>78.6</td>
-                                                    <td>11.4</td>
-                                                    <td>10.8</td>
-                                                    <td>23.2</td>
-                                                    <td>22.6</td>
-                                                    <td>11.2</td>
-                                                    <td>12.4</td>
-                                                    <td>5.8</td>
-                                                    <td>4.6</td>
-                                                    <td>True</td>
+                                                    <td>77.7</td>
+                                                    <td>74.6</td>
                                                     <td>False</td>
-                                                    <td>-0.2</td>
-                                                    <td>-0.2</td>
-                                                    <td>-0.8</td>
-                                                    <td>-0.5</td>
-                                                    <td>0.8</td>
-                                                    <td>1.3</td>
+                                                    <td>True</td>
+                                                    <td>-0.4</td>
+                                                    <td>-0.1</td>
+                                                    <td>0.5</td>
                                                     <td>0.4</td>
-                                                    <td>-1.4</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -514,7 +455,7 @@ Predicted Score:
             <section>
                 <h1 id="Nonlinear-models">Nonlinear models<a class="anchor-link" href="#Nonlinear-models">&#182;</a></h1>
                 <div class="bk-root">
-                    <div class="bk-plotdiv" id="8fbab149-aab7-4b6c-8169-34af10930274"></div>
+                    <div class="bk-plotdiv" id="f32d1307-5b80-4a19-aa4f-e113123d2f99"></div>
                 </div>
 
             </section>
@@ -541,7 +482,7 @@ Predicted Score:
                         <div class="input">
                             <div class="inner_cell">
                                 <div class="input_area">
-                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">explain_model</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span></pre></div>
+                                    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">explain_model</span><span class="p">(</span><span class="p">)</span></pre></div>
                                 </div>
                             </div>
                         </div>
@@ -552,26 +493,14 @@ Predicted Score:
                                     <div class="prompt"></div>
                                     <div class="output_subarea output_stream output_stdout output_text">
                                         <pre>predicted_score_first =
-	+0.51 * avg_score_first
-	+0.74 * avg_score_second
-	+0.24 * logit_fg_pct_first
-	-0.75 * logit_fg_pct_second
-	-0.03 * logit_fg3_pct_first
-	-0.80 * logit_fg3_pct_second
-	-0.32 * logit_ft_pct_first
-	+0.98 * logit_ft_pct_second
-	+0.20 * avg_or_first
-	-0.94 * avg_or_second
-	+2.93 * avg_dr_first
-	-1.21 * avg_dr_second
-	+4.13 * avg_to_first
-	-24.27 * avg_to_second
-	+0.03 * avg_stl_first
-	-1.31 * avg_stl_second
-	+0.13 * logit_avg_won_first
-	-4.15 * logit_avg_won_second
-	+0.08 * home_game_first
-	-0.24 * home_game_second
+	+0.60 * avg_score_
+	+0.32 * avg_score_opponent
+	+3.34 * transformed_fg_pct_
+	-1.00 * transformed_fg_pct_opponent
+	-0.16 * transformed_avg_won_
+	-15.28 * transformed_avg_won_opponent
+	+0.11 * home_game_
+	-0.65 * home_game_opponent
 </pre>
                                     </div>
                                 </div>
@@ -586,12 +515,24 @@ Predicted Score:
             </section>
 
             <section>
-                <h2 id="Linear-regression-minimizes-the-sum-of-squared-errors">Linear regression minimizes the sum of squared errors<a class="anchor-link" href="#Linear-regression-minimizes-the-sum-of-squared-errors">&#182;</a></h2> $$error(\mathbf{w}) = \sum_j (\mathbf{x}_j \cdot \mathbf{w} - y_j)^2$$
+                <h2 id="Linear-regression-minimizes-the-sum-of-squared-errors">Linear regression minimizes the sum of squared errors<a class="anchor-link" href="#Linear-regression-minimizes-the-sum-of-squared-errors">&#182;</a></h2> $$error(\mathbf{w}) = \sum_j (\color{red}\mathbf{x}_j \cdot \mathbf{w} \color{black} - \color{blue}y_j\color{black})^2$$
+                <blockquote>
+                    The sum of the square of the
+                    <font color="#FF0000">the predictions</font> minus
+                    <font color="#0000FF">the labels</font>
             </section>
 
             <section>
                 <h2 id="Linear-regression-finds-the-most-likely-weights">Linear regression finds the most likely weights<a class="anchor-link" href="#Linear-regression-finds-the-most-likely-weights">&#182;</a></h2>
-                <p>Given our data, $(X, \mathbf{y})$, <em>Bayes Rule</em> says that $$ P(\mathbf{w} | X, \mathbf{y}) = \frac{P(X, \mathbf{y} | \mathbf{w}) p(\mathbf{w})}{P(X, \mathbf{y})} $$
+                <p>Given our data, $(\color{red}X, \mathbf{y}\color{black})$, <em>Bayes' Rule</em> says that $$ P( \color{blue}\mathbf{w} \color{black}| \color{red} X, \mathbf{y} \color{black})~ \propto P( \color{red}X, \mathbf{y} \color{black}| \color{blue}
+                    \mathbf{w} \color{black}) P(\color{blue} \mathbf{w} \color{black}) $$
+                    <blockquote> The probability of
+                        <font color="#0000FF">the weights</font> given
+                        <font color="#FF0000">the data</font> is proportional to the probability of
+                        <font color="#FF0000">the data</font> given
+                        <font color="#0000FF">the weights</font> times the probability of
+                        <font color="#0000FF">the weights</font>.
+                    </blockquote>
             </section>
 
             <section>
@@ -605,7 +546,7 @@ Predicted Score:
             </section>
 
             <section>
-                <h2 id="More-guarantees*:">More guarantees<sup style="vertical-align: bottom">*</sup>:<a class="anchor-link" href="#More-guarantees*:">&#182;</a></h2>
+                <h2 id="More-guarantees*:">More guarantees<sup style="vertical-align: bottom;">*</sup> for linear regression:<a class="anchor-link" href="#More-guarantees*:">&#182;</a></h2>
                 <ul>
                     <li>If there is no noise, the true $\mathbf{w}$ will be recovered</li>
                     <li>$\mathbf{w}$ is unique</li>
@@ -616,28 +557,22 @@ Predicted Score:
             </section>
 
             <section>
-                <h2 id="Evaluating-Fit">Evaluating Fit<a class="anchor-link" href="#Evaluating-Fit">&#182;</a></h2>
-                <div class="bk-root">
-                    <div class="bk-plotdiv" id="e0422ea3-1110-4915-a76a-36c2c415912f"></div>
-                </div>
-            </section>
-
-            <section>
                 <h2 id="How-wrong-will-I-be?">How wrong will I be?<a class="anchor-link" href="#How-wrong-will-I-be?">&#182;</a></h2>
 
                 <div class="bk-root">
-                    <div class="bk-plotdiv" id="04638bc4-fccc-4e4c-a37b-59771712530a"></div>
+                    <div class="bk-plotdiv" id="cb99c3fd-a046-411f-969e-d1abadc7b050"></div>
                 </div>
+
             </section>
 
             <section>
-                <h2 id="Cross-validation,-testing,-overfitting...">Cross validation, testing, overfitting...<a class="anchor-link" href="#Cross-validation,-testing,-overfitting...">&#182;</a></h2>
+                <h2 id="Cross-validation,-testing,-overfitting...">A brief warning<a class="anchor-link" href="#Cross-validation,-testing,-overfitting...">&#182;</a></h2>
                 <div class="bk-root">
                     <div class="bk-plotdiv" id="00c1133c-4435-4805-8f03-d779caee9ade"></div>
                 </div>
             </section>
 
-            <section>
+            <section data-transition="none">
                 <h2 id="Cross-validation,-testing,-overfitting...">Cross validation, testing, overfitting...<a class="anchor-link" href="#Cross-validation,-testing,-overfitting...">&#182;</a></h2>
                 <div class="bk-root">
                     <div class="bk-plotdiv" id="85533d43-cfe0-4cb8-ace2-6805afd95e9d"></div>
@@ -650,7 +585,7 @@ Predicted Score:
                     <div class="input">
                         <div class="inner_cell">
                             <div class="input_area">
-                                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_winner</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
+                                <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_winner</span><span class="p">(</span><span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Connecticut&#39;</span><span class="p">)</span></pre></div>
                             </div>
                         </div>
                     </div>
@@ -659,7 +594,7 @@ Predicted Score:
                         <div class="output">
                             <div class="output_area">
                                 <div class="output_text output_subarea output_execute_result">
-                                    <pre>&#39;North Carolina has a 80% chance of beating Connecticut&#39;</pre>
+                                    <pre>&#39;North Carolina has a 78% chance of beating Connecticut&#39;</pre>
                                 </div>
                             </div>
                         </div>
@@ -668,9 +603,16 @@ Predicted Score:
                 <div class="cell border-box-sizing text_cell rendered">
                     <div class="inner_cell">
                         <div class="text_cell_render border-box-sizing rendered_html">
-                            <p>Instead of $$ \mathbf{y} = X\mathbf{w}, $$
-                            </p>
-                            $$ \mathbf{y} = \sigma \left(X\mathbf{w}\right) $$
+                            <table>
+                                <tr>
+                                    <td>Linear Regression</td>
+                                    <td>Logistic Regression</td>
+                                </tr>
+                                <tr>
+                                    <td>$$\mathbf{y} = X\mathbf{w}$$</td>
+                                    <td>$$\mathbf{y} = \sigma(X\mathbf{w})$$</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -686,9 +628,8 @@ Predicted Score:
             <section>
                 <h2 id="What-is-$\sigma$?">What is $\sigma$?<a class="anchor-link" href="#What-is-$\sigma$?">&#182;</a></h2>
                 <div class="bk-root">
-                    <div class="bk-plotdiv" id="4ebf98af-1666-4864-b340-55a981fd8c63"></div>
+                    <div class="bk-plotdiv" id="32680f94-73e3-4402-a807-d6aeb115eb08"></div>
                 </div>
-                .
 
             </section>
 
@@ -718,6 +659,13 @@ Predicted Score:
                         </td>
                         <td><img src="img/edward.png"></img>
                         </td>
+                        <td><img src="img/emcee.png"></img>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">Stan</td>
+                        <td style="text-align:center">Edward</td>
+                        <td style="text-align:center">Emcee</td>
                     </tr>
                 </table>
             </section>

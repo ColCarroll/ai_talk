@@ -14,8 +14,9 @@ DATA = os.path.join(DIR, 'RegularSeasonDetailedResults.csv')
 TEAM_DATA = os.path.join(DIR, 'Teams.csv')
 CLEAN_DATA_DIR = os.path.join(DIR, 'clean_data')
 
-LSUFFIX = '_first'
-RSUFFIX = '_second'
+LSUFFIX = '_'
+RSUFFIX = '_opponent'
+TRANSFORM_PREFIX = 'transformed_'
 
 if not os.path.isdir(CLEAN_DATA_DIR):
     os.mkdir(CLEAN_DATA_DIR)
@@ -112,23 +113,12 @@ def get_df(year):
 
 def gen_features(df, min_periods=5):
     avg_features = [
-        'ast',
-        'blk',
-        'dr',
-        'or',
-        'pf',
         'score',
-        'stl',
-        'to',
         'won']
 
     sum_features = [
         'fga',
-        'fga3',
         'fgm',
-        'fgm3',
-        'fta',
-        'ftm',
         ]
 
     def transformer(group):
@@ -140,8 +130,8 @@ def gen_features(df, min_periods=5):
         return pd.DataFrame(transformed)
     features = df.groupby(['season', 'team']).apply(transformer).dropna()
     features['fg_pct'] = features.tot_fgm / np.maximum(features.tot_fga, 1)
-    features['fg3_pct'] = features.tot_fgm3 / np.maximum(features.tot_fga3, 1)
-    features['ft_pct'] = features.tot_ftm / np.maximum(features.tot_fta, 1)
+    # features['fg3_pct'] = features.tot_fgm3 / np.maximum(features.tot_fga3, 1)
+    # features['ft_pct'] = features.tot_ftm / np.maximum(features.tot_fta, 1)
     return features.reset_index(drop=True)
 
 
@@ -180,23 +170,25 @@ def classification_target(df):
     return df['score' + LSUFFIX] > df['score' + RSUFFIX]
 
 
-def get_feature_names():
-    base_features = ['avg_score', 'fg_pct', 'fg3_pct', 'ft_pct', 'avg_or', 'avg_dr',
-                     'avg_to', 'avg_stl', 'avg_won', 'home_game']
+def get_feature_names(transform=False):
+    base_features = ['avg_score', 'fg_pct', 'avg_won', 'home_game']
     features = []
     for feature in base_features:
-        if feature.endswith('_pct') or feature == 'avg_won':
-            feature = 'logit_' + feature
+        if transform and feature.endswith('_pct'):
+            feature = TRANSFORM_PREFIX + feature
         for suffix in (LSUFFIX, RSUFFIX):
             features.append(feature + suffix)
     return features
 
 
-def get_features(df):
-    features = df[[f for f in get_feature_names() if not f.startswith('logit_')]]
-    epsilon = 1e-6
-    for feature in [f for f in get_feature_names() if f.startswith('logit_')]:
-        features[feature] = logit(df[feature[6:]].clip(epsilon, 1-epsilon))
+def get_features(df, transform):
+    if not transform:
+        features = df[get_feature_names(transform)]
+    else:
+        features = df[[f for f in get_feature_names(transform) if not f.startswith(TRANSFORM_PREFIX)]]
+        epsilon = 1e-6
+        for feature in [f for f in get_feature_names(transform) if f.startswith(TRANSFORM_PREFIX)]:
+            features[feature] = logit(df[feature[len(TRANSFORM_PREFIX):]].clip(epsilon, 1-epsilon))
     return features
 
 
@@ -213,19 +205,19 @@ def get_classification_model_class(cv):
         return LogisticRegression(fit_intercept=False)
 
 
-def fit_regression_model(df, cv=False):
-    return get_regression_model_class(cv).fit(get_features(df), regression_target(df))
+def fit_regression_model(df, cv=False, transform=True):
+    return get_regression_model_class(cv).fit(get_features(df, transform), regression_target(df))
 
 
-def fit_classification_model(df, cv=False):
-    return get_classification_model_class(cv).fit(get_features(df), classification_target(df))
+def fit_classification_model(df, cv=False, transform=True):
+    return get_classification_model_class(cv).fit(get_features(df, transform), classification_target(df))
 
 
-def get_team_predict_data(df, team_one, team_two):
+def get_team_predict_data(df, team_one, team_two, transform=True):
     teams = (team_one, team_two)
     TEAM_CACHE.check_teams(*teams)
     last_games = df.iloc[[df.day_num[df.team_name == team].idxmax() for team in teams]]
-    return get_features(get_predict_data(last_games))
+    return get_features(get_predict_data(last_games), transform=transform)
 
 
 def get_historical_data():
@@ -237,14 +229,14 @@ def get_historical_data():
 LATEST_DATA = get_clean_data(2016)
 
 
-def get_models(cv=False):
+def get_models(transform):
     df = get_historical_data()
-    return fit_regression_model(df, cv=cv), fit_classification_model(df, cv=cv)
+    return fit_regression_model(df, transform=transform), fit_classification_model(df, transform=transform)
 
 
-def predict_scores(reg, team_one, team_two):
+def predict_scores(reg, team_one, team_two, transform=False):
     teams = (team_one, team_two)
-    data = get_team_predict_data(LATEST_DATA, *teams)
+    data = get_team_predict_data(LATEST_DATA, *teams, transform=transform)
     scores = reg.predict(data).round().astype(int)
     msg = []
     for team, score in zip(teams, scores[0]):
@@ -252,21 +244,24 @@ def predict_scores(reg, team_one, team_two):
     return ' '.join(msg)
 
 
-def predict_winner(clf, team_one, team_two):
+def predict_winner(clf, team_one, team_two, transform=False):
     teams = (team_one, team_two)
-    data = get_team_predict_data(LATEST_DATA, *teams)
+    data = get_team_predict_data(LATEST_DATA, *teams, transform=transform)
     prob = int(round(clf.predict_proba(data)[0][1] * 100))
     return '{} has a {:d}% chance of beating {}'.format(team_one, prob, team_two)
 
 
-def predict(reg, clf, team_one, team_two):
-    winner_msg = predict_winner(clf, team_one, team_two)
-    score_msg = predict_scores(reg, team_one, team_two)
+def predict(reg, clf, team_one, team_two, transform=False):
+    winner_msg = predict_winner(clf, team_one, team_two, transform=transform)
+    score_msg = predict_scores(reg, team_one, team_two, transform=transform)
     print("{}\nPredicted Score:\n\t{}".format(winner_msg, score_msg))
 
 
-def explain_model(reg):
+def explain_model(reg, transform=False):
     msg = ['predicted_score_first = ']
-    for coef, feature in zip(reg.coef_[0], get_feature_names()):
+    for coef, feature in zip(reg.coef_[0], get_feature_names(transform)):
         msg.append('\t{:+.2f} * {}'.format(coef, feature))
+    df = get_training_data(LATEST_DATA)
+    y = reg.predict(get_features(df, transform=transform)) - regression_target(df).as_matrix()
     print('\n'.join(msg))
+    return y
